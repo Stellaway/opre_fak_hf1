@@ -3,6 +3,9 @@ public class Task {
     int start;
     int prio;
     int burst;
+    int initialBurst;
+    int waited;
+    boolean nowRun;
 
     // Constructor
 
@@ -12,11 +15,22 @@ public class Task {
         start = s;
         prio = p;
         burst = b;
+        initialBurst = b;
+        nowRun = false;
+        waited = -1;        //has not run
     }
 
-    void run(){
+    //runs for 1 tick, returns if finished
+    boolean run(int clock){
         burst--;
+        nowRun = !nowRun;
+        if (burst == 0) {
+            waited = clock-initialBurst+1;
+            return true;
+        }
+        return false;
     }
+
 
     // Getters
     public char getName(){
@@ -35,5 +49,12 @@ public class Task {
         return burst;
     }
 
+    public int getWaited(){
+        return waited;
+    }
 
+    public boolean nowRun(){
+        return nowRun;
+    }
 }
+
