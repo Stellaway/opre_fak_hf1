@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -11,6 +10,7 @@ public class CPU {
     ArrayList<Task> queuedSRTF;
     ArrayList<Task> finished;
     ArrayList<Character> runOrder;
+    ArrayList<Task> allTasks;
 
     public CPU(){
         notRunning = new ArrayList<>();
@@ -22,17 +22,17 @@ public class CPU {
     }
 
     public void runTasks(){
+        allTasks = new ArrayList<>(notRunning); // copy every task
+
         while(!notRunning.isEmpty() || !queuedRR.isEmpty() || !queuedSRTF.isEmpty()){
             tick();
-            System.out.println("notRunning is empty: " + notRunning.isEmpty());
-            System.out.println("queuedRR is empty: " + queuedRR.isEmpty());
-            System.out.println("queuedSRTF is empty: " + queuedSRTF.isEmpty());
 
         }
+        getOutConsecutiveDuplicates(runOrder);
     }
 
-    public void addTask(char name, int start, int prio, int burst){
-        Task t = new Task(name, start, prio, burst);
+    public void addTask(char name, int prio, int start, int burst){
+        Task t = new Task(name, prio, start, burst);
 
         notRunning.add(t);
         notRunning.sort(Comparator.comparing(Task::getStart));
@@ -40,7 +40,6 @@ public class CPU {
     }
 
     public void tick(){
-        System.out.println("Clock: " + clock);
 
         ArrayList<Task> tempQueuedRR = new ArrayList<>();           //for alphabetical order among now-starting RRs
         ArrayList<Task> toRemove = new ArrayList<>();            //for removing now-starting tasks from notRunning
@@ -99,17 +98,19 @@ public class CPU {
             }
         }
 
-        if(!isRR){                          //shortest remaining time first algorithm
-            //nothing to do
-        }
-
 
         clock++;
     }
 
-    public ArrayList<Task> getFinished(){
-        return finished;
+    public void getOutConsecutiveDuplicates(ArrayList<Character> list){
+        for(int i = 0; i < list.size()-1; i++){
+            if(list.get(i) == list.get(i+1)){
+                list.remove(i);
+                i--;
+            }
+        }
     }
+
 
     public void printRunOrder(){
         for(char c : runOrder){
@@ -118,10 +119,9 @@ public class CPU {
     }
 
     public void printWaitTimes(){
-        ArrayList<Task> temp = new ArrayList<>(finished);
-        temp.sort(Comparator.comparing(Task::getName));
-        for(Task t : temp){
-            System.out.print(t.getName() + ":" + t.getWaited()+ ",");
+        for(Task t : allTasks){
+            System.out.print(t.getName() + ":" + t.getWaited());
+            if(t != allTasks.get(allTasks.size()-1)) System.out.print(",");
         }
 
     }

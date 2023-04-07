@@ -10,7 +10,7 @@ public class Task {
     // Constructor
 
 
-    public Task(char n, int s, int p, int b){
+    public Task(char n, int p, int s, int b){
         name = n;
         start = s;
         prio = p;
@@ -25,7 +25,7 @@ public class Task {
         burst--;
         nowRun = !nowRun;
         if (burst == 0) {
-            waited = clock-initialBurst+1;
+            waited = clock-start-initialBurst+1;
             return true;
         }
         return false;
