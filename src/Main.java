@@ -15,11 +15,6 @@ public class Main {
         }
 
         cpu.runTasks();
-
-
         cpu.print();
-
-
-
     }
 }

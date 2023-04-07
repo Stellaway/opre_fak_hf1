@@ -80,6 +80,11 @@ public class CPU {
             }
         }else if(!queuedSRTF.isEmpty()){
             nowServed = queuedSRTF.get(0);          //get the first SRTF
+            for(Task t : queuedSRTF){               //search for the shoetest burst task
+                if(t.getBurst() <= nowServed.getBurst()){
+                    nowServed = t;
+                }
+            }
         }
         if(nowServed == null){                      //nothing to run, return from this tick
             clock++;
