@@ -5,7 +5,7 @@ public class Task {
     int burst;
     int initialBurst;
     int waited;
-    boolean nowRun;
+    int nowRun;
 
     // Constructor
 
@@ -16,14 +16,14 @@ public class Task {
         prio = p;
         burst = b;
         initialBurst = b;
-        nowRun = false;
+        nowRun = 0;
         waited = -1;        //has not run
     }
 
     //runs for 1 tick, returns if finished
     boolean run(int clock){
         burst--;
-        nowRun = !nowRun;
+        nowRun++;
         if (burst == 0) {
             waited = clock-start-initialBurst+1;
             return true;
@@ -53,8 +53,9 @@ public class Task {
         return waited;
     }
 
-    public boolean nowRun(){
+    public int nowRun(){
         return nowRun;
     }
+    public void nullRun() { nowRun = 0; }
 }
 

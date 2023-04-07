@@ -72,6 +72,12 @@ public class CPU {
         if(!queuedRR.isEmpty()){
             isRR = true;
             nowServed = queuedRR.get(0);            //get the first RR
+            while (nowServed.nowRun()==2){          //if ran for 2 ticks
+                queuedRR.remove(nowServed);
+                queuedRR.add(queuedRR.size(), nowServed);
+                nowServed.nullRun();
+                nowServed = queuedRR.get(0);
+            }
         }else if(!queuedSRTF.isEmpty()){
             nowServed = queuedSRTF.get(0);          //get the first SRTF
         }
@@ -91,12 +97,7 @@ public class CPU {
         }
 
 
-        if(isRR){                           //round-robin algorithm
-            if (!nowServed.nowRun()){       //not now run => run last time => drained its timeslice => move to the end
-                queuedRR.remove(nowServed);
-                queuedRR.add(nowServed);
-            }
-        }
+
 
 
         clock++;
