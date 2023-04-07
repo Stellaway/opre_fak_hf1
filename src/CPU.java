@@ -50,7 +50,7 @@ public class CPU {
 
                 if(t.getPrio() == 0) {                              //SRTF, put at its place
 
-                    queuedSRTF.add(t);
+                    queuedSRTF.add(0,t);
 
                 }
                 else {                                              //RR, put at the end of RRs
@@ -61,7 +61,7 @@ public class CPU {
         }
         tempQueuedRR.sort(Comparator.comparing(Task::getName));     //adding RRs in alphabetical order, not ruining round-robin order
         queuedRR.addAll(tempQueuedRR);
-        queuedSRTF.sort(Comparator.comparing(Task::getBurst).thenComparing(Task::getStart).thenComparing(Task::getName));
+        queuedSRTF.sort(Comparator.comparing(Task::getBurst));
 
         for(Task t : toRemove){                                      //remove now-starting tasks from notRunning
             notRunning.remove(t);
@@ -80,11 +80,11 @@ public class CPU {
             }
         }else if(!queuedSRTF.isEmpty()){
             nowServed = queuedSRTF.get(0);          //get the first SRTF
-            for(Task t : queuedSRTF){               //search for the shoetest burst task
+            /*for(Task t : queuedSRTF){               //search for the shortest burst task
                 if(t.getBurst() <= nowServed.getBurst()){
                     nowServed = t;
                 }
-            }
+            }*/
         }
         if(nowServed == null){                      //nothing to run, return from this tick
             clock++;
