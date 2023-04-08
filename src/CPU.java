@@ -43,7 +43,7 @@ public class CPU {
 
         ArrayList<Task> tempQueuedRR = new ArrayList<>();           //for alphabetical order among now-starting RRs
         ArrayList<Task> tempQueuedSRTF = new ArrayList<>();         //for alphabetical order among now-starting SRTFs
-        ArrayList<Task> toRemove = new ArrayList<>();            //for removing now-starting tasks from notRunning
+        ArrayList<Task> toRemove = new ArrayList<>();               //for removing now-starting tasks from notRunning
         for(Task t : notRunning){                                   //now-starting tasks
             if(t.getStart() == clock){
 
@@ -63,8 +63,12 @@ public class CPU {
         tempQueuedRR.sort(Comparator.comparing(Task::getName));     //adding RRs in alphabetical order, not ruining round-robin order
         tempQueuedSRTF.sort(Comparator.comparing(Task::getName));   //adding SRTFs in alphabetical order, not ruining round-robin order
 
+
+
         queuedRR.addAll(tempQueuedRR);
-        queuedSRTF.addAll(tempQueuedSRTF);
+        //queuedSRTF.addAll(tempQueuedSRTF);
+        tempQueuedSRTF.addAll(queuedSRTF);                          //adding SRTFs to the beginning of the queue
+        queuedSRTF= new ArrayList<>(tempQueuedSRTF);
 
         queuedSRTF.sort(Comparator.comparing(Task::getBurst));
 
