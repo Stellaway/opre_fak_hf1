@@ -42,6 +42,7 @@ public class CPU {
     public void tick(){
 
         ArrayList<Task> tempQueuedRR = new ArrayList<>();           //for alphabetical order among now-starting RRs
+        ArrayList<Task> tempQueuedSRTF = new ArrayList<>();         //for alphabetical order among now-starting SRTFs
         ArrayList<Task> toRemove = new ArrayList<>();            //for removing now-starting tasks from notRunning
         for(Task t : notRunning){                                   //now-starting tasks
             if(t.getStart() == clock){
@@ -50,7 +51,7 @@ public class CPU {
 
                 if(t.getPrio() == 0) {                              //SRTF, put at its place
 
-                    queuedSRTF.add(0,t);
+                    tempQueuedSRTF.add(t);
 
                 }
                 else {                                              //RR, put at the end of RRs
@@ -60,12 +61,14 @@ public class CPU {
             }
         }
         tempQueuedRR.sort(Comparator.comparing(Task::getName));     //adding RRs in alphabetical order, not ruining round-robin order
+        tempQueuedSRTF.sort(Comparator.comparing(Task::getName));   //adding SRTFs in alphabetical order, not ruining round-robin order
+
         queuedRR.addAll(tempQueuedRR);
+        queuedSRTF.addAll(tempQueuedSRTF);
+
         queuedSRTF.sort(Comparator.comparing(Task::getBurst));
 
-        for(Task t : toRemove){                                      //remove now-starting tasks from notRunning
-            notRunning.remove(t);
-        }
+        notRunning.removeAll(toRemove);             //remove now-starting tasks from notRunning
 
         Task nowServed = null;
         boolean isRR = false;
