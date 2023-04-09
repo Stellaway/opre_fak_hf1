@@ -57,5 +57,9 @@ public class Task {
         return nowRun;
     }
     public void nullRun() { nowRun = 0; }
+
+    public boolean equals(Task t){
+        return (name == t.getName()&&start == t.getStart()&&prio == t.getPrio()&&burst == t.getBurst());
+    }
 }
 

@@ -66,9 +66,9 @@ public class CPU {
 
 
         queuedRR.addAll(tempQueuedRR);
-        //queuedSRTF.addAll(tempQueuedSRTF);
+        queuedSRTF.addAll(tempQueuedSRTF);
         tempQueuedSRTF.addAll(queuedSRTF);                          //adding SRTFs to the beginning of the queue
-        queuedSRTF= new ArrayList<>(tempQueuedSRTF);
+        //queuedSRTF= new ArrayList<>(tempQueuedSRTF);
 
         queuedSRTF.sort(Comparator.comparing(Task::getBurst));
 
